@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AutoTrade"
 include(":app")
- 
+include(":di")
