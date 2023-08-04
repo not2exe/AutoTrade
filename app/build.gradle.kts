@@ -30,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = Config.javaCompileVersion
+        targetCompatibility = Config.javaCompileVersion
     }
     kotlinOptions {
-        jvmTarget = "18"
+        jvmTarget = Config.jvmTarget
     }
     buildFeatures {
         compose = true
@@ -57,4 +57,7 @@ dependencies {
     implementation(Libs.compose_ui)
     implementation(Libs.compose_graphics)
     implementation(Libs.compose_material3)
+    implementation(Libs.dagger)
+    implementation(project("path" to ":di"))
+    add("kapt", Libs.dagger_compiler)
 }
