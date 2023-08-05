@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/searchCarFragment">
+
+    <fragment
+        android:id="@+id/searchCarFragment"
+        android:name="com.autotrade.searchscreenfeature.ui.SearchCarFragment"
+        android:label="SearchCarFragment" />
+</navigation>

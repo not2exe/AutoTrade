@@ -1,11 +1,10 @@
 plugins {
     id(Plugins.android_library)
     id(Plugins.kotlin_android)
-    id(Plugins.kapt)
 }
 
 android {
-    namespace = "com.autotrade.di"
+    namespace = "com.autotrade.common"
     compileSdk = Config.compileSdk
 
     defaultConfig {
@@ -27,11 +26,17 @@ android {
     kotlinOptions {
         jvmTarget = Config.jvmTarget
     }
-}
 
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Config.kotlinCompilerExtensionVersion
+    }
+}
 dependencies {
-    implementation(Libs.dagger)
-    implementation(Libs.activity)
-    implementation(Libs.fragment)
-    add("kapt", Libs.dagger_compiler)
+    implementation(Libs.compose_ui)
+    implementation(Libs.compose_material3)
+    implementation(platform(Platforms.compose_bom))
 }

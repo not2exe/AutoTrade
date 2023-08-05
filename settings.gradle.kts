@@ -16,3 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "AutoTrade"
 include(":app")
 include(":di")
+include(":searchScreenFeature")
+include(":common")

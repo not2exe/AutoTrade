@@ -14,10 +14,6 @@ android {
         targetSdk = Config.targetSdk
         versionCode = Config.versionCode
         versionName = Config.versionName
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -36,12 +32,6 @@ android {
     kotlinOptions {
         jvmTarget = Config.jvmTarget
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -50,14 +40,11 @@ android {
 }
 
 dependencies {
-    implementation(Libs.core)
-    implementation(Libs.lifecycle_runtime_ktx)
-    implementation(Libs.activity_compose)
-    implementation(platform(Platforms.compose_bom))
-    implementation(Libs.compose_ui)
-    implementation(Libs.compose_graphics)
-    implementation(Libs.compose_material3)
     implementation(Libs.dagger)
+    implementation(Libs.fragment)
+    implementation(Libs.nav_fragment)
+    implementation(Libs.nav_ui)
     implementation(project("path" to ":di"))
+    implementation(project("path" to ":searchScreenFeature"))
     add("kapt", Libs.dagger_compiler)
 }
