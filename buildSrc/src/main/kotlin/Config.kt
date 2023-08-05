@@ -8,4 +8,5 @@ object Config {
     const val versionName = "1.0"
     const val jvmTarget = "17"
     val javaCompileVersion = JavaVersion.VERSION_17
+    const val kotlinCompilerExtensionVersion = "1.4.3"
 }

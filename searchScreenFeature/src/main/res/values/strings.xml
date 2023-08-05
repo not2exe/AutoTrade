@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="model">Модель</string>
+    <string name="brand">Бренд</string>
+    <string name="apply">Применить</string>
+    <string name="by_price">По цене</string>
+    <string name="filters">Фильтры</string>
+    <string name="sort">Сортировка</string>
+</resources>
