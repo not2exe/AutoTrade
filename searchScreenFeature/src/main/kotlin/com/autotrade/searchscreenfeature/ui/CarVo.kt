@@ -1,4 +1,4 @@
-package com.autotrade.common
+package com.autotrade.searchscreenfeature.ui
 
 data class CarVo(
     val fullName: String,

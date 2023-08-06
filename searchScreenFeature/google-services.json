@@ -41,6 +41,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761842679891:android:5a7fb2b9c22246bbb5c6a6",
+        "android_client_info": {
+          "package_name": "com.autotrade.searchscreenfeature"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761842679891-dstd4a42cbo4874j2btvlasd0b2v1t4e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.autotrade.searchscreenfeature",
+            "certificate_hash": "a3ae59f4cfb6ca02a7f1be08761fc974870f4030"
+          }
+        },
+        {
+          "client_id": "761842679891-c3u87l73f8ctoq1399gb4tbkehe44tab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ4LbaoUuvKT2kS5VtKCwLu60Wb9fWu8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761842679891-c3u87l73f8ctoq1399gb4tbkehe44tab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

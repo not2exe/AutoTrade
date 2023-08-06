@@ -44,6 +44,8 @@ dependencies {
     implementation(Libs.fragment)
     implementation(Libs.nav_fragment)
     implementation(Libs.nav_ui)
+    implementation(platform(Platforms.firebase_bom))
+    implementation(Libs.firestore)
     implementation(project("path" to ":di"))
     implementation(project("path" to ":searchScreenFeature"))
     add("kapt", Libs.dagger_compiler)
