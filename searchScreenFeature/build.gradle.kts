@@ -1,6 +1,8 @@
 plugins {
     id(Plugins.android_library)
     id(Plugins.kotlin_android)
+    id(Plugins.google_service)
+    id(Plugins.kapt)
 }
 
 android {
@@ -47,5 +49,12 @@ dependencies {
     implementation(Libs.compose_material3)
     implementation(Libs.coroutines)
     implementation(platform(Platforms.compose_bom))
+    implementation(Libs.paging)
+    implementation(Libs.paging_compose)
+    implementation(platform(Platforms.firebase_bom))
+    implementation(Libs.firestore)
+    implementation(Libs.dagger)
+    add("kapt", Libs.dagger_compiler)
     implementation(project("path" to ":common"))
+    implementation(project("path" to ":di"))
 }

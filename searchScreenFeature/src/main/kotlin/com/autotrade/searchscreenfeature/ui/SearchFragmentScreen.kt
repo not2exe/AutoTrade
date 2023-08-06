@@ -11,14 +11,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,11 +32,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -44,21 +48,49 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.autotrade.common.CarFields
 import com.autotrade.common.CarVo
 import com.autotrade.searchscreenfeature.R
+import com.autotrade.searchscreenfeature.ui.stateholders.SearchCarViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchFragmentScreen() {
+fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
+    val cars = viewModel.getCars().collectAsLazyPagingItems()
+    val isFiltersOrSortByApplied =
+        viewModel.isFilterOrSortByApplied().collectAsState(initial = false).value
+    val fabOnClick: () -> Unit
+    val fabPos: FabPosition
+    if (isFiltersOrSortByApplied) {
+        fabOnClick = {
+            viewModel.clearOrderedBy()
+            viewModel.clearFilters()
+        }
+        fabPos = FabPosition.Center
+    } else {
+        fabOnClick = {}
+        fabPos = FabPosition.End
+    }
+
     var showFiltersDialog by remember { mutableStateOf(false) }
     var showSortDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
-                Icon(Icons.Filled.Add, contentDescription = null)
+            FloatingActionButton(onClick = fabOnClick) {
+                if (isFiltersOrSortByApplied) {
+                    Row(modifier = Modifier.padding(8.dp)) {
+                        Text(text = stringResource(id = R.string.clear_filters))
+                        Spacer(modifier = Modifier.size(8.dp))
+                        Icon(Icons.Filled.Clear, contentDescription = null)
+                    }
+                } else {
+                    Icon(Icons.Filled.Add, contentDescription = null)
+                }
             }
         },
+        floatingActionButtonPosition = fabPos,
         topBar = {
             TopAppBar(
                 modifier = Modifier
@@ -93,28 +125,28 @@ fun SearchFragmentScreen() {
         ) {
             if (showFiltersDialog) {
                 Dialog(onDismissRequest = { showFiltersDialog = false }) {
-                    FiltersDialog { showFiltersDialog = false }
+                    FiltersDialog(viewModel) { showFiltersDialog = false }
                 }
             }
             if (showSortDialog) {
                 Dialog(onDismissRequest = { showSortDialog = false }) {
-                    SortByDialog { showSortDialog = false }
+                    SortByDialog(viewModel) { showSortDialog = false }
                 }
             }
-            Spacer(modifier = Modifier.size(20.dp))
-            CarCard(
-                card = CarVo(
-                    "LADA (ВАЗ) Granta I, 2012",
-                    "250000",
-                    "200000",
-                    "Синий",
-                    "1.6л/87 л.с./Бензин",
-                    "Передний",
-                    "Седан",
-                    "3",
-                    "Не требует ремонта"
-                )
-            )
+            LazyColumn {
+                items(count = cars.itemCount) { i ->
+                    if (cars[i] != null) {
+                        val marginTop =
+                            if (i == 0) {
+                                32.dp
+                            } else 16.dp
+                        Spacer(modifier = Modifier.size(marginTop))
+                        CarCard(card = cars[i]!!)
+                        Spacer(modifier = Modifier.size(16.dp))
+                    }
+                }
+
+            }
         }
     }
 }
@@ -159,18 +191,33 @@ fun DoubleTextRow(
 }
 
 @Composable
-fun FiltersDialog(closeDialog: () -> Unit) {
-    val brandText = rememberSaveable { mutableStateOf("") }
-    val modelText = rememberSaveable { mutableStateOf("") }
+fun FiltersDialog(
+    viewModel: SearchCarViewModel,
+    closeDialog: () -> Unit
+) {
+    val filters: Map<String, String> =
+        viewModel.getFilters().collectAsState(initial = mapOf()).value
+    val brand = filters[CarFields.BRAND.string] ?: ""
+    val model = filters[CarFields.MODEL.string] ?: ""
+    val brandText = remember { mutableStateOf(brand) }
+    val modelText = remember { mutableStateOf(model) }
+    LaunchedEffect(key1 = filters) {
+        brandText.value = brand
+        modelText.value = model
+    }
+
     CardDialogWithApplyButton(
         header = stringResource(id = R.string.filters),
-        onClickApply = { closeDialog.invoke() }) {
+        onClickApply = {
+            viewModel.changeFilters(brandText.value, modelText.value)
+            closeDialog.invoke()
+        }) {
         EditText(
             modifier = Modifier
                 .fillMaxWidth(),
             brandText, labelText = stringResource(id = R.string.brand)
         )
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(16.dp))
         EditText(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -181,14 +228,30 @@ fun FiltersDialog(closeDialog: () -> Unit) {
 }
 
 @Composable
-fun SortByDialog(closeDialog: () -> Unit) {
-    var selected by remember { mutableStateOf(false) }
+fun SortByDialog(
+    viewModel: SearchCarViewModel,
+    closeDialog: () -> Unit
+) {
+    val selectedField = viewModel.getSortedBy().collectAsState(initial = "").value ?: ""
+    var selected by remember { mutableStateOf(selectedField == CarFields.PRICE.string) }
+    LaunchedEffect(key1 = selectedField) {
+        selected = selectedField == CarFields.PRICE.string
+    }
     CardDialogWithApplyButton(
         header = stringResource(id = R.string.sort),
-        onClickApply = { closeDialog.invoke() }) {
+        onClickApply = {
+            if (selected) {
+                viewModel.setOrderedBy(CarFields.PRICE.string)
+            } else {
+                viewModel.clearOrderedBy()
+            }
+            closeDialog.invoke()
+        }) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .clickable { selected = !selected }) {
+            .clickable { selected = !selected }
+            .padding(8.dp)
+        ) {
             Text(
                 modifier = Modifier.align(CenterVertically),
                 text = stringResource(id = R.string.by_price),

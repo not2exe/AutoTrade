@@ -6,4 +6,5 @@
     <string name="by_price">По цене</string>
     <string name="filters">Фильтры</string>
     <string name="sort">Сортировка</string>
+    <string name="clear_filters">Очистить фильтры</string>
 </resources>

@@ -9,6 +9,8 @@ internal object Version {
     const val fragment_version = "1.6.1"
     const val activity_version = "1.7.2"
     const val coroutines_version = "1.7.3"
+    const val paging_version = "3.1.1"
+    const val paging_compose_version = "3.2.0"
 }
 
 object Libs {
@@ -31,6 +33,9 @@ object Libs {
     const val nav_ui = "androidx.navigation:navigation-ui-ktx:${Version.jetpack_nav_version}"
     const val coroutines =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutines_version}"
+    const val paging = "androidx.paging:paging-common:${Version.paging_version}"
+    const val paging_compose = "androidx.paging:paging-compose:${Version.paging_compose_version}"
+    const val firestore = "com.google.firebase:firebase-firestore-ktx"
 }
 
 object Platforms {

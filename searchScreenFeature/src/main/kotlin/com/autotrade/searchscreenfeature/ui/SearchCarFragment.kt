@@ -7,8 +7,16 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.autotrade.common.theme.AutoTradeTheme
+import com.autotrade.di.injectedViewModel
+import com.autotrade.searchscreenfeature.di.SearchScreenFeatureComponentProvider
 
 class SearchCarFragment : Fragment() {
+
+    private val searchCarViewModel by injectedViewModel { stateHandle ->
+        (requireActivity() as SearchScreenFeatureComponentProvider)
+            .provideComponent().viewModelFactory().create(stateHandle)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -17,7 +25,7 @@ class SearchCarFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 AutoTradeTheme {
-                    SearchFragmentScreen()
+                    SearchFragmentScreen(searchCarViewModel)
                 }
             }
         }
