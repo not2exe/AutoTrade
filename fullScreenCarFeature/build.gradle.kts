@@ -1,12 +1,12 @@
 plugins {
     id(Plugins.android_library)
     id(Plugins.kotlin_android)
-    id(Plugins.google_service)
     id(Plugins.kapt)
+    id(Plugins.google_service)
 }
 
 android {
-    namespace = "com.autotrade.searchscreenfeature"
+    namespace = "com.autotrade.fullscreencarfeature"
     compileSdk = Config.compileSdk
 
     defaultConfig {
@@ -49,12 +49,11 @@ dependencies {
     implementation(Libs.compose_material3)
     implementation(Libs.coroutines)
     implementation(platform(Platforms.compose_bom))
-    implementation(Libs.paging)
     implementation(Libs.paging_compose)
+    implementation(Libs.dagger)
     implementation(platform(Platforms.firebase_bom))
     implementation(Libs.firestore)
     implementation(Libs.nav_fragment)
-    implementation(Libs.dagger)
     add("kapt", Libs.dagger_compiler)
     implementation(project("path" to ":common"))
     implementation(project("path" to ":di"))

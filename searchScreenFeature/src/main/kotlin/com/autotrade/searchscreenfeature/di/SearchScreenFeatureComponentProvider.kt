@@ -1,5 +1,5 @@
 package com.autotrade.searchscreenfeature.di
 
 interface SearchScreenFeatureComponentProvider {
-    fun provideComponent(): SearchScreenFeatureComponent
+    fun provideSearchCarFeatureComponent(): SearchScreenFeatureComponent
 }

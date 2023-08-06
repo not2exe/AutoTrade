@@ -48,5 +48,7 @@ dependencies {
     implementation(Libs.firestore)
     implementation(project("path" to ":di"))
     implementation(project("path" to ":searchScreenFeature"))
+    implementation(project("path" to ":fullScreenCarFeature"))
+    implementation(project("path" to ":common"))
     add("kapt", Libs.dagger_compiler)
 }

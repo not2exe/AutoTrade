@@ -1,4 +1,4 @@
-package com.autotrade.searchscreenfeature.domain
+package com.autotrade.common.carcommunication
 
 import com.autotrade.common.capitalize
 

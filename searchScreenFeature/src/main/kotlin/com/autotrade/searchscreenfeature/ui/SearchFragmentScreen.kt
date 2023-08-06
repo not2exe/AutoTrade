@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,16 +26,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,13 +50,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.autotrade.common.CarFields
+import com.autotrade.common.carcommunication.CarFields
+import com.autotrade.common.EditText
 import com.autotrade.searchscreenfeature.R
 import com.autotrade.searchscreenfeature.ui.stateholders.SearchCarViewModel
+import com.google.firebase.firestore.Query
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
+fun SearchFragmentScreen(
+    viewModel: SearchCarViewModel,
+    navigateToRedactFragment: () -> Unit
+) {
     val cars = viewModel.getCars().collectAsLazyPagingItems()
     val isFiltersOrSortByApplied =
         viewModel.isFilterOrSortByApplied().collectAsState(initial = false).value
@@ -68,9 +74,10 @@ fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
         }
         fabPos = FabPosition.Center
     } else {
-        fabOnClick = {}
+        fabOnClick = navigateToRedactFragment
         fabPos = FabPosition.End
     }
+
 
     var showFiltersDialog by remember { mutableStateOf(false) }
     var showSortDialog by remember { mutableStateOf(false) }
@@ -79,7 +86,7 @@ fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
         floatingActionButton = {
             FloatingActionButton(onClick = fabOnClick) {
                 if (isFiltersOrSortByApplied) {
-                    Row(modifier = Modifier.padding(8.dp)) {
+                    Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp)) {
                         Text(text = stringResource(id = R.string.clear_filters))
                         Spacer(modifier = Modifier.size(8.dp))
                         Icon(Icons.Filled.Clear, contentDescription = null)
@@ -91,29 +98,23 @@ fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
         },
         floatingActionButtonPosition = fabPos,
         topBar = {
-            TopAppBar(
-                modifier = Modifier
-                    .height(48.dp), title = {},
-                actions = {
-                    Icon(
-                        modifier = Modifier
-                            .clickable { showFiltersDialog = true }
-                            .height(48.dp),
-                        painter = painterResource(id = R.drawable.ic_filter_36),
-                        contentDescription = null,
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Icon(
-                        modifier = Modifier
-                            .clickable { showSortDialog = true }
-                            .height(48.dp),
-                        painter = painterResource(id = R.drawable.ic_sort_36),
-                        contentDescription = null
-                    )
-                },
-                colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+            TopAppBar(modifier = Modifier.height(48.dp), title = {}, actions = {
+                Icon(
+                    modifier = Modifier
+                        .clickable { showFiltersDialog = true }
+                        .height(48.dp),
+                    painter = painterResource(id = R.drawable.ic_filter_36),
+                    contentDescription = null,
                 )
+                Spacer(modifier = Modifier.size(8.dp))
+                Icon(modifier = Modifier
+                    .clickable { showSortDialog = true }
+                    .height(48.dp),
+                    painter = painterResource(id = R.drawable.ic_sort_36),
+                    contentDescription = null)
+            }, colors = topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
             )
         },
     ) { paddingValues ->
@@ -135,12 +136,15 @@ fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
             LazyColumn {
                 items(count = cars.itemCount) { i ->
                     if (cars[i] != null) {
-                        val marginTop =
-                            if (i == 0) {
-                                32.dp
-                            } else 16.dp
+                        val marginTop = if (i == 0) {
+                            32.dp
+                        } else 16.dp
                         Spacer(modifier = Modifier.size(marginTop))
-                        CarCard(card = cars[i]!!)
+                        CarCard(
+                            card = cars[i]!!,
+                            viewModel = viewModel,
+                            navigateToRedactFragment = navigateToRedactFragment
+                        )
                         Spacer(modifier = Modifier.size(16.dp))
                     }
                 }
@@ -151,10 +155,14 @@ fun SearchFragmentScreen(viewModel: SearchCarViewModel) {
 }
 
 @Composable
-fun CarCard(card: CarVo) {
+fun CarCard(card: CarVo, viewModel: SearchCarViewModel, navigateToRedactFragment: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(), shape = RectangleShape
+            .fillMaxWidth()
+            .clickable {
+                viewModel.onChooseCar(card.carDomain)
+                navigateToRedactFragment.invoke()
+            }, shape = RectangleShape
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = card.fullName, style = MaterialTheme.typography.titleMedium)
@@ -171,55 +179,44 @@ fun CarCard(card: CarVo) {
 
 @Composable
 fun DoubleTextRow(
-    str1: String,
-    str2: String,
-    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
+    str1: String, str2: String, textStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
     Row {
         Text(
-            text = str1,
-            modifier = Modifier.weight(1f),
-            style = textStyle
+            text = str1, modifier = Modifier.weight(1f), style = textStyle
         )
         Text(
-            text = str2,
-            modifier = Modifier.weight(1f),
-            style = textStyle
+            text = str2, modifier = Modifier.weight(1f), style = textStyle
         )
     }
 }
 
 @Composable
 fun FiltersDialog(
-    viewModel: SearchCarViewModel,
-    closeDialog: () -> Unit
+    viewModel: SearchCarViewModel, closeDialog: () -> Unit
 ) {
-    val filters: Map<String, String> =
-        viewModel.getFilters().collectAsState(initial = mapOf()).value
-    val brand = filters[CarFields.BRAND.string] ?: ""
-    val model = filters[CarFields.MODEL.string] ?: ""
-    val brandText = remember { mutableStateOf(brand) }
-    val modelText = remember { mutableStateOf(model) }
-    LaunchedEffect(key1 = filters) {
+    val brandText = remember { mutableStateOf("") }
+    val modelText = remember { mutableStateOf("") }
+    LaunchedEffect(key1 = Unit) {
+        val filters = viewModel.getFilters()
+        val brand = filters?.get(CarFields.BRAND.string) ?: ""
+        val model = filters?.get(CarFields.MODEL.string) ?: ""
         brandText.value = brand
         modelText.value = model
     }
 
-    CardDialogWithApplyButton(
-        header = stringResource(id = R.string.filters),
-        onClickApply = {
-            viewModel.changeFilters(brandText.value, modelText.value)
-            closeDialog.invoke()
-        }) {
+    CardDialogWithApplyButton(header = stringResource(id = R.string.filters), onClickApply = {
+        viewModel.changeFilters(brandText.value, modelText.value)
+        closeDialog.invoke()
+    }) {
         EditText(
-            modifier = Modifier
-                .fillMaxWidth(),
-            brandText, labelText = stringResource(id = R.string.brand)
+            modifier = Modifier.fillMaxWidth(),
+            brandText,
+            labelText = stringResource(id = R.string.brand)
         )
         Spacer(modifier = Modifier.size(16.dp))
         EditText(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             modelText,
             labelText = stringResource(id = R.string.model)
         )
@@ -228,29 +225,27 @@ fun FiltersDialog(
 
 @Composable
 fun SortByDialog(
-    viewModel: SearchCarViewModel,
-    closeDialog: () -> Unit
+    viewModel: SearchCarViewModel, closeDialog: () -> Unit
 ) {
-    val selectedField = viewModel.getSortedBy().collectAsState(initial = "").value ?: ""
-    var selected by remember { mutableStateOf(selectedField == CarFields.PRICE.string) }
-    LaunchedEffect(key1 = selectedField) {
-        selected = selectedField == CarFields.PRICE.string
+    var selected by remember { mutableStateOf(false) }
+    var direction by remember { mutableStateOf(Query.Direction.DESCENDING) }
+    LaunchedEffect(key1 = Unit) {
+        val pair = viewModel.getSortedBy()
+        selected = pair?.first == CarFields.PRICE.string
+        direction = pair?.second ?: Query.Direction.DESCENDING
     }
-    CardDialogWithApplyButton(
-        header = stringResource(id = R.string.sort),
-        onClickApply = {
-            if (selected) {
-                viewModel.setOrderedBy(CarFields.PRICE.string)
-            } else {
-                viewModel.clearOrderedBy()
-            }
-            closeDialog.invoke()
-        }) {
+    CardDialogWithApplyButton(header = stringResource(id = R.string.sort), onClickApply = {
+        if (selected) {
+            viewModel.setOrderedBy(CarFields.PRICE.string, direction)
+        } else {
+            viewModel.clearOrderedBy()
+        }
+        closeDialog.invoke()
+    }) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .clickable { selected = !selected }
-            .padding(8.dp)
-        ) {
+            .padding(8.dp)) {
             Text(
                 modifier = Modifier.align(CenterVertically),
                 text = stringResource(id = R.string.by_price),
@@ -263,6 +258,22 @@ fun SortByDialog(
                 onClick = { selected = !selected },
                 modifier = Modifier.align(CenterVertically)
             )
+            val isDescending = direction == Query.Direction.DESCENDING
+            IconButton(onClick = {
+                direction = if (isDescending) {
+                    Query.Direction.ASCENDING
+                } else {
+                    Query.Direction.DESCENDING
+                }
+            }) {
+                if (isDescending) {
+                    Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null)
+                } else {
+                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
+
+                }
+
+            }
         }
     }
 }
@@ -276,11 +287,9 @@ fun CardDialogWithApplyButton(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
-        colors = CardDefaults.cardColors(
+            .wrapContentHeight(), colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
-        ),
-        shape = RoundedCornerShape(CornerSize(8.dp))
+        ), shape = RoundedCornerShape(CornerSize(8.dp))
     ) {
         Text(
             modifier = Modifier
@@ -294,8 +303,7 @@ fun CardDialogWithApplyButton(
         content.invoke(this)
         Spacer(modifier = Modifier.size(16.dp))
         Button(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(CornerSize(8.dp)),
             onClick = onClickApply
         ) {
@@ -303,19 +311,4 @@ fun CardDialogWithApplyButton(
         }
     }
 
-}
-
-@Composable
-fun EditText(modifier: Modifier, sourceText: MutableState<String>, labelText: String) {
-    TextField(
-        modifier = modifier,
-        value = sourceText.value,
-        onValueChange = { str -> sourceText.value = str },
-        label = {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
-    )
 }

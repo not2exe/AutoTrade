@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="body">Кузов</string>
+    <string name="brand">Марка</string>
+    <string name="model">Модель</string>
+    <string name="color">Цвет</string>
+    <string name="condition">Состояние</string>
+    <string name="countOwners">Количество владельцев</string>
+    <string name="engineCapacity">Объем двигателя (л)</string>
+    <string name="enginePower">Мощность двигателя (л.c.)</string>
+    <string name="engineType">Тип двигателя</string>
+    <string name="wheel">Руль</string>
+    <string name="mileage">Пробег (км)</string>
+    <string name="price">Цена (₽)</string>
+    <string name="year">Год</string>
+    <string name="drive">Привод</string>
+</resources>

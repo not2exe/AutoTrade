@@ -1,7 +1,7 @@
 package com.autotrade.searchscreenfeature.ui
 
 import com.autotrade.common.capitalize
-import com.autotrade.searchscreenfeature.domain.CarDomain
+import com.autotrade.common.carcommunication.CarDomain
 import dagger.Reusable
 import javax.inject.Inject
 
@@ -12,16 +12,17 @@ class CarFormatter @Inject constructor() {
             fullName = "${carDomain.brand.capitalize()} ${carDomain.model.capitalize()}, ${carDomain.year}",
             body = carDomain.body.capitalize(),
             color = carDomain.color.capitalize(),
-            price = "${formatNumber(carDomain.price)} ₽",
-            mileage = "${formatNumber(carDomain.mileage)} км",
+            price = "${formatBigNumber(carDomain.price)} ₽",
+            mileage = "${formatBigNumber(carDomain.mileage)} км",
             engineCharacteristics = carDomain.engine.toString(),
             drive = carDomain.drive.capitalize(),
             countOwners = carDomain.countOwners.toString(),
-            condition = carDomain.condition.capitalize()
+            condition = carDomain.condition.capitalize(),
+            carDomain = carDomain
         )
     }
 
-    private fun formatNumber(number: Int): String {
+    private fun formatBigNumber(number: Int): String {
         val strBuilder = StringBuilder()
         val list = number.toString()
             .reversed()

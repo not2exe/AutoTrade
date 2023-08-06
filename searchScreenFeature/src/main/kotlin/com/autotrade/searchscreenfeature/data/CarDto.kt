@@ -1,6 +1,10 @@
 package com.autotrade.searchscreenfeature.data
 
+import com.google.firebase.firestore.DocumentId
+
 data class CarDto(
+    @DocumentId
+    val id: String,
     val body: String?,
     val brand: String?,
     val color: String?,
@@ -16,6 +20,7 @@ data class CarDto(
     val drive: String?,
 ) {
     constructor() : this(
+        "",
         null,
         null,
         null,

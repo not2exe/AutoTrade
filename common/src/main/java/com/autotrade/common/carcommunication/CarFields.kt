@@ -1,4 +1,4 @@
-package com.autotrade.common
+package com.autotrade.common.carcommunication
 
 enum class CarFields(val string: String) {
     BODY("body"), BRAND("brand"), COLOR("color"),

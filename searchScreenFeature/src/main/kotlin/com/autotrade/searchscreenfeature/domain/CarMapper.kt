@@ -1,5 +1,7 @@
 package com.autotrade.searchscreenfeature.domain
 
+import com.autotrade.common.carcommunication.CarDomain
+import com.autotrade.common.carcommunication.Engine
 import com.autotrade.searchscreenfeature.data.CarDto
 import dagger.Reusable
 import javax.inject.Inject
@@ -9,6 +11,7 @@ class CarMapper @Inject constructor() {
 
     fun map(carDto: CarDto): CarDomain =
         CarDomain(
+            id = carDto.id,
             body = requireNotNull(carDto.body),
             brand = requireNotNull(carDto.brand),
             color = requireNotNull(carDto.color),
