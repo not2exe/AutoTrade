@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 @Reusable
 class CarMapper @Inject constructor() {
+
     fun map(carDto: CarDto): CarDomain =
         CarDomain(
             body = requireNotNull(carDto.body),

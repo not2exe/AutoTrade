@@ -9,6 +9,7 @@ class CarFiltersRepositoryImpl @Inject constructor(
     private val carFiltersDataStore: CarFiltersDataStore
 ) :
     CarFiltersRepository {
+
     override fun getSortBy(): Flow<Pair<String, Query.Direction>?> =
         carFiltersDataStore.getSortBy()
 
@@ -22,5 +23,6 @@ class CarFiltersRepositoryImpl @Inject constructor(
         carFiltersDataStore.setSortBy(sortBy)
 
     override fun clearFilters() = carFiltersDataStore.clearFilters()
+
     override fun clearSortedBy() = carFiltersDataStore.clearSortedBy()
 }

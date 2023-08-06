@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.autotrade.common.CarFields
-import com.autotrade.common.CarVo
 import com.autotrade.searchscreenfeature.R
 import com.autotrade.searchscreenfeature.ui.stateholders.SearchCarViewModel
 

@@ -5,5 +5,6 @@ import com.google.firebase.firestore.Query
 import kotlinx.coroutines.flow.Flow
 
 interface CarPagingRepository {
+
     fun getCars(query: Query): Flow<PagingData<CarDomain>>
 }

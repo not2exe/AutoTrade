@@ -1,6 +1,5 @@
 package com.autotrade.searchscreenfeature.ui
 
-import com.autotrade.common.CarVo
 import com.autotrade.common.capitalize
 import com.autotrade.searchscreenfeature.domain.CarDomain
 import dagger.Reusable

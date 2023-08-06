@@ -15,6 +15,7 @@ class CarFiltersDataStore @Inject constructor() {
 
     fun getFilters(): Flow<Map<String, Any>> =
         filters
+
     fun setFilters(filters: Map<String, Any>) {
         this.filters.value = filters
     }

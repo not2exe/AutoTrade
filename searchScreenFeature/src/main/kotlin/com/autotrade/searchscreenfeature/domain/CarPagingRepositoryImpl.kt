@@ -13,6 +13,7 @@ import javax.inject.Inject
 
 class CarPagingRepositoryImpl @Inject constructor(private val carMapper: CarMapper) :
     CarPagingRepository {
+
     override fun getCars(query: Query): Flow<PagingData<CarDomain>> {
         return Pager(
             PagingConfig(pageSize = PAGE_SIZE)

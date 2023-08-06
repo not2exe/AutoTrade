@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 class CarPagingSource(
     private val query: Query
 ) : PagingSource<QuerySnapshot, CarDto>() {
+
     override fun getRefreshKey(state: PagingState<QuerySnapshot, CarDto>): QuerySnapshot? {
         return null
     }

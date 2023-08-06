@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.autotrade.common.CarVo
+import com.autotrade.searchscreenfeature.ui.CarVo
 import com.autotrade.searchscreenfeature.domain.CarFiltersRepository
 import com.autotrade.searchscreenfeature.domain.CarPagingRepository
 import com.autotrade.searchscreenfeature.domain.GetQueryUseCase
