@@ -19,7 +19,6 @@ interface FullScreenCarFeatureModule {
     fun bindsCarRepository(carsRepositoryImpl: CarsRepositoryImpl): CarsRepository
 
     companion object {
-        @FragmentScope
         @Provides
         fun provideCoroutineScope(): CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
 
