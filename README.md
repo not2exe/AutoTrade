@@ -28,4 +28,5 @@
 <p align="center"> 
   <img src = "https://github.com/not2exe/AutoTrade/assets/91745398/c5246445-dd69-48fb-b9ec-836d6542cfe6" width=25% height=25%>
   </p>
-
+  
+## **Открытие экрана редактирования:**(смотреть файл в demo)
