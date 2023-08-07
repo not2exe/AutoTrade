@@ -6,7 +6,7 @@
   <img src = "https://github.com/not2exe/AutoTrade/assets/91745398/47c15827-6e2a-4c40-91ed-44bf4fe98588" width=25% height=25%>
   </p>
   
-## **"Экран редактирования/создания**
+## **Экран редактирования/создания**
 <p align="center"> 
   <img src = "https://github.com/not2exe/AutoTrade/assets/91745398/f817ea96-add6-4cc8-908c-ddb2f7e3d3a2" width=25% height=25%>
   <img src = "https://github.com/not2exe/AutoTrade/assets/91745398/25afbe81-66b1-4ffb-a51b-9d05100893da" width=25% height=25%>
