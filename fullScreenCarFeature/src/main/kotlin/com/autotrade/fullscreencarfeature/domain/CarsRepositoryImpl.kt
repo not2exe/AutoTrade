@@ -2,6 +2,7 @@ package com.autotrade.fullscreencarfeature.domain
 
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -16,6 +17,7 @@ class CarsRepositoryImpl @Inject constructor(
     override fun addToCollection(list: List<Pair<Int, String>>) {
         coroutineScope.launch {
             collectionReference.add(requestCarMapper.map(list)).await()
+            coroutineScope.cancel()
         }
     }
 
@@ -24,6 +26,7 @@ class CarsRepositoryImpl @Inject constructor(
             collectionReference.document(documentId).set(
                 requestCarMapper.map(list)
             ).await()
+            coroutineScope.cancel()
         }
     }
 }

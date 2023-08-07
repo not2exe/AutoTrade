@@ -2,7 +2,6 @@ package com.autotrade.fullscreencarfeature.ui.stateholders
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.autotrade.common.carcommunication.CarCommunicationRepository
 import com.autotrade.fullscreencarfeature.domain.CarsRepository
 import com.autotrade.fullscreencarfeature.ui.CarRedactFormatter
@@ -10,6 +9,8 @@ import com.autotrade.fullscreencarfeature.ui.CarRedactVo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class CarRedactViewModel @AssistedInject constructor(
@@ -17,6 +18,7 @@ class CarRedactViewModel @AssistedInject constructor(
     private val carCommunicationRepository: CarCommunicationRepository,
     private val carsRepository: CarsRepository,
     private val carRedactFormatter: CarRedactFormatter,
+    private val customScope: CoroutineScope
 ) : ViewModel() {
 
     @AssistedFactory
@@ -37,8 +39,9 @@ class CarRedactViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        viewModelScope.launch {
+        customScope.launch {
             carCommunicationRepository.clearCarDomain()
+            customScope.cancel()
         }
         super.onCleared()
     }
