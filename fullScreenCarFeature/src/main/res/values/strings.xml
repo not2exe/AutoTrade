@@ -14,4 +14,5 @@
     <string name="price">Цена (₽)</string>
     <string name="year">Год</string>
     <string name="drive">Привод</string>
+    <string name="fill_all_fields">Заполните все поля, чтобы добавить машину</string>
 </resources>

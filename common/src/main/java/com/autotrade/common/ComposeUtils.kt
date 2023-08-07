@@ -16,12 +16,17 @@ fun EditText(
     sourceText: MutableState<String>,
     labelText: String,
     labelStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    keyboardType: KeyboardType = KeyboardType.Ascii
+    keyboardType: KeyboardType = KeyboardType.Ascii,
+    conditionToInput: (str: String) -> Boolean = { true }
 ) {
     TextField(
         modifier = modifier,
         value = sourceText.value,
-        onValueChange = { str -> sourceText.value = str },
+        onValueChange = { str ->
+            if (conditionToInput(str)) {
+                sourceText.value = str
+            }
+        },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         label = {
             Text(
