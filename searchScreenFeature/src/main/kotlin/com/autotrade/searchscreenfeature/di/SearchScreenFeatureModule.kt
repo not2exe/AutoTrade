@@ -1,5 +1,6 @@
 package com.autotrade.searchscreenfeature.di
 
+import com.autotrade.di.scopes.FragmentScope
 import com.autotrade.searchscreenfeature.domain.CarFiltersRepository
 import com.autotrade.searchscreenfeature.domain.CarFiltersRepositoryImpl
 import com.autotrade.searchscreenfeature.domain.CarPagingRepository
@@ -20,6 +21,8 @@ interface SearchScreenFeatureModule {
     fun bindCarPagingRepository(carPagingRepositoryImpl: CarPagingRepositoryImpl): CarPagingRepository
 
     companion object {
+
+        @FragmentScope
         @Provides
         fun provideCarCollectionRef(): CollectionReference = Firebase.firestore.collection("auto")
     }

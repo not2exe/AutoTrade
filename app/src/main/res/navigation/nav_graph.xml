@@ -7,5 +7,12 @@
     <fragment
         android:id="@+id/searchCarFragment"
         android:name="com.autotrade.searchscreenfeature.ui.SearchCarFragment"
-        android:label="SearchCarFragment" />
+        android:label="SearchCarFragment">
+    </fragment>
+    <fragment
+        android:id="@+id/carRedactFragment"
+        android:name="com.autotrade.fullscreencarfeature.ui.CarRedactFragment"
+        android:label="CarRedactFragment" >
+        <deepLink app:uri="android-app://autotrade/carRedactFragment" />
+    </fragment>
 </navigation>

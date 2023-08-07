@@ -9,3 +9,11 @@ fun String.capitalize(): String {
         ) else it.toString()
     }
 }
+
+fun String.isInt(): Boolean {
+    return this.toIntOrNull() != null
+}
+
+fun String.isDouble(): Boolean {
+    return this.toDoubleOrNull() != null
+}

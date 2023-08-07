@@ -1,6 +1,7 @@
 plugins {
     id(Plugins.android_library)
     id(Plugins.kotlin_android)
+    id(Plugins.kapt)
 }
 
 android {
@@ -39,4 +40,7 @@ dependencies {
     implementation(Libs.compose_ui)
     implementation(Libs.compose_material3)
     implementation(platform(Platforms.compose_bom))
+    implementation(Libs.dagger)
+    add("kapt", Libs.dagger_compiler)
+    implementation(project("path" to ":di"))
 }

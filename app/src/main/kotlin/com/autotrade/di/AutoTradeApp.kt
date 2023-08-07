@@ -2,10 +2,9 @@ package com.autotrade.di
 
 import android.app.Application
 
-class AutoTradeApp : Application(),
-    AppComponentHolder {
+class AutoTradeApp : Application(){
 
-    override val component: AppComponent by lazy {
+    val component: AppComponent by lazy {
         DaggerAppComponent.factory().create(this)
     }
 }

@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.filter
 import androidx.paging.map
+import com.autotrade.common.carcommunication.CarDomain
 import com.autotrade.searchscreenfeature.data.CarPagingSource
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.flow.Flow
