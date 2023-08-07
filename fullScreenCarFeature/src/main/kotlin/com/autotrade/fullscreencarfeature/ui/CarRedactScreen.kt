@@ -86,6 +86,7 @@ fun CarRedactScreen(viewModel: CarRedactViewModel, navigateBack: () -> Unit) {
                 .fillMaxSize()
         ) {
             items(list.value.size) { i ->
+                val bottomSpace = if (i == list.value.size - 1) 350.dp else 8.dp
                 Spacer(modifier = Modifier.size(8.dp))
                 EditText(
                     modifier = Modifier
@@ -96,9 +97,8 @@ fun CarRedactScreen(viewModel: CarRedactViewModel, navigateBack: () -> Unit) {
                     keyboardType = list.value[i].keyboardType,
                     conditionToInput = list.value[i].condition
                 )
-                Spacer(modifier = Modifier.size(8.dp))
+                Spacer(modifier = Modifier.size(bottomSpace))
             }
         }
-
     }
 }
